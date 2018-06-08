@@ -3506,7 +3506,7 @@ static int do_tmpfile(struct nameidata *nd, unsigned flags,
 	if (error)
 		goto out2;
 	file->f_path.mnt = path.mnt;
-	error = finish_open(file, child, NULL, opened);
+	error = finish_open(file, child, NULL);
 	if (error)
 		goto out2;
 	error = open_check_o_direct(file);
