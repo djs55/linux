@@ -130,7 +130,8 @@ void fuse_invalidate_entry_cache(struct dentry *entry)
  */
 static void fuse_invalidate_entry(struct dentry *entry)
 {
-	d_invalidate(entry);
+	printk("skipping fuse_invalidate_entry's d_invalidate\n");
+	/* d_invalidate(entry); -- skip to avoid "deleting" current working dirs */
 	fuse_invalidate_entry_cache(entry);
 }
 
