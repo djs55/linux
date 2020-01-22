@@ -964,7 +964,7 @@ int fuse_reverse_inval_entry(struct super_block *sb, u64 parent_nodeid,
 	struct inode *parent;
 	struct dentry *dir;
 	struct dentry *entry;
-	printk("fuse_reverse_inval_entry parent=%lld child_nodeid=%lld name=%s\n", parent_nodeid, child_nodeid, name);
+	printk("fuse_reverse_inval_entry parent=%lld child_nodeid=%lld name=%s\n", parent_nodeid, child_nodeid, name->name);
 	parent = ilookup5(sb, parent_nodeid, fuse_inode_eq, &parent_nodeid);
 	if (!parent)
 		return -ENOENT;
@@ -984,7 +984,8 @@ int fuse_reverse_inval_entry(struct super_block *sb, u64 parent_nodeid,
 	if (!entry)
 		goto unlock;
 
-	fuse_dir_changed(parent);
+	printk("skipping fuse_dir_changed(parent)\n");
+	/* fuse_dir_changed(parent); */
 	fuse_invalidate_entry(entry);
 
 	if (child_nodeid != 0 && d_really_is_positive(entry)) {
