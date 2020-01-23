@@ -965,6 +965,9 @@ int fuse_reverse_inval_entry(struct super_block *sb, u64 parent_nodeid,
 	struct dentry *dir;
 	struct dentry *entry;
 	printk("fuse_reverse_inval_entry parent=%lld child_nodeid=%lld name=%s\n", parent_nodeid, child_nodeid, name->name);
+	printk("returning EINVAL\n");
+	return -EINVAL;
+#if 0
 	parent = ilookup5(sb, parent_nodeid, fuse_inode_eq, &parent_nodeid);
 	if (!parent)
 		return -ENOENT;
@@ -1022,6 +1025,7 @@ int fuse_reverse_inval_entry(struct super_block *sb, u64 parent_nodeid,
 	inode_unlock(parent);
 	iput(parent);
 	return err;
+#endif
 }
 
 /*
