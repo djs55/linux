@@ -130,8 +130,9 @@ void fuse_invalidate_entry_cache(struct dentry *entry)
  */
 static void fuse_invalidate_entry(struct dentry *entry)
 {
-	printk("skipping fuse_invalidate_entry's d_invalidate\n");
+	printk("replacing fuse_invalidate_entry's d_invalidate with d_drop\n");
 	//d_invalidate(entry);
+	d_drop(entry);
 	fuse_invalidate_entry_cache(entry);
 }
 
