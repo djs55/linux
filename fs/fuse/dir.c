@@ -984,9 +984,9 @@ int fuse_reverse_inval_entry(struct super_block *sb, u64 parent_nodeid,
 	if (!entry)
 		goto unlock;
 
-	printk("skipping fuse_dir_changed(parent)\n");
-	/* fuse_dir_changed(parent); */
-	fuse_invalidate_entry(entry);
+	fuse_dir_changed(parent);
+	printk("skipping fuse_invalidate_entry(entry)\n");
+	/* fuse_invalidate_entry(entry); */
 
 	if (child_nodeid != 0 && d_really_is_positive(entry)) {
 		inode_lock(d_inode(entry));
