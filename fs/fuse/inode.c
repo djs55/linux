@@ -22,6 +22,7 @@
 #include <linux/exportfs.h>
 #include <linux/posix_acl.h>
 #include <linux/pid_namespace.h>
+#include <linux/fsnotify.h>
 
 MODULE_AUTHOR("Miklos Szeredi <miklos@szeredi.hu>");
 MODULE_DESCRIPTION("Filesystem in Userspace");
@@ -336,10 +337,22 @@ int fuse_reverse_inval_inode(struct super_block *sb, u64 nodeid,
 	struct inode *inode;
 	pgoff_t pg_start;
 	pgoff_t pg_end;
+	struct dentry *dentry;
 
 	inode = ilookup5(sb, nodeid, fuse_inode_eq, &nodeid);
 	if (!inode)
 		return -ENOENT;
+
+	inode_lock(inode);
+	dentry = d_find_alias(inode);
+	if (dentry) {
+		printk("inject ATTR_MTIME for %lld", nodeid);
+		fsnotify_change(dentry, ATTR_MTIME);
+		dput(dentry);
+	} else {
+		printk("failed to find dentry for %lld", nodeid);
+	}
+	inode_unlock(inode);
 
 	fuse_invalidate_attr(inode);
 	forget_all_cached_acls(inode);
