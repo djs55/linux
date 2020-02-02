@@ -16,6 +16,7 @@
 #include <linux/xattr.h>
 #include <linux/iversion.h>
 #include <linux/posix_acl.h>
+#include <linux/fsnotify.h>
 
 static void fuse_advise_use_readdirplus(struct inode *dir)
 {
@@ -980,6 +981,11 @@ int fuse_reverse_inval_entry(struct super_block *sb, u64 parent_nodeid,
 
 	name->hash = full_name_hash(dir, name->name, name->len);
 	entry = d_lookup(dir, name);
+	if (entry) {
+		printk("fuse_invalidate_entry calling fsnotify_create for %s\n", name->name);
+		fsnotify_create(parent, entry);
+	}
+
 	dput(dir);
 	if (!entry)
 		goto unlock;
